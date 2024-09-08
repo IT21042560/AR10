@@ -58,6 +58,10 @@ navigator.mediaDevices.getUserMedia({
     video.srcObject = stream; // Set the video source to the camera stream
     const videoTexture = new THREE.VideoTexture(video); // Create a texture from the video feed
     scene.background = videoTexture; // Set the video texture as the scene background
+    // Verify if the video feed is loaded and visible
+    video.addEventListener('loadeddata', () => {
+      console.log('Video feed loaded.');
+    });
   })
   .catch((err) => {
     console.error("Error accessing the camera: ", err);
