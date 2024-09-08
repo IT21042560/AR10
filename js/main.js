@@ -1,17 +1,16 @@
 import * as THREE from "https://cdn.skypack.dev/three@0.129.0/build/three.module.js";
 import { OrbitControls } from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/controls/OrbitControls.js";
 import { OBJLoader } from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/loaders/OBJLoader.js";
-import { DeviceOrientationControls } from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/controls/DeviceOrientationControls.js";
 
 // Create a Three.js scene
 const scene = new THREE.Scene();
 
 // Create a camera and set its position
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-camera.position.z = 500;
+camera.position.z = 50; // Adjust as needed
 
 // Create a renderer and set its size
-const renderer = new THREE.WebGLRenderer({ alpha: true }); // Alpha: true for transparent background
+const renderer = new THREE.WebGLRenderer({ alpha: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.getElementById("container3D").appendChild(renderer.domElement);
 
@@ -51,8 +50,10 @@ const video = document.createElement('video');
 video.autoplay = true;
 video.style.display = 'none'; // Hide the video element
 
-// Access the user's camera
-navigator.mediaDevices.getUserMedia({ video: true })
+// Access the rear camera
+navigator.mediaDevices.getUserMedia({
+  video: { facingMode: { exact: 'environment' } } // Request the rear camera
+})
   .then((stream) => {
     video.srcObject = stream; // Set the video source to the camera stream
     const videoTexture = new THREE.VideoTexture(video); // Create a texture from the video feed
@@ -62,16 +63,18 @@ navigator.mediaDevices.getUserMedia({ video: true })
     console.error("Error accessing the camera: ", err);
   });
 
-// Set up device orientation controls
-const deviceControls = new DeviceOrientationControls(camera, renderer.domElement);
-deviceControls.enable = true;
+// Set up camera controls
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.dampingFactor = 0.25;
+controls.enableZoom = true;
 
 // Render the scene
 function animate() {
   requestAnimationFrame(animate);
 
-  // Update device orientation controls
-  deviceControls.update();
+  // Update controls
+  controls.update();
 
   // Render the scene
   renderer.render(scene, camera);
