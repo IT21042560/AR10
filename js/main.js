@@ -7,7 +7,7 @@ const scene = new THREE.Scene();
 
 // Create a camera and set its position
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-camera.position.z = 50; // Adjust as needed
+camera.position.z = 50; // Adjust the z position if needed
 
 // Create a renderer and set its size
 const renderer = new THREE.WebGLRenderer({ alpha: true });
@@ -20,19 +20,20 @@ const loader = new OBJLoader();
 // Load the .obj file
 let object;
 loader.load(
-  'models/model.obj', // Update the path to your .obj file
+  'models/model.obj', // Ensure this path is correct
   function (obj) {
     object = obj;
     scene.add(object);
     object.position.set(0, 0, 0); // Center the model
     object.scale.set(10, 10, 10); // Adjust the scale
     changeObjectColor(object, 0x3cb371); // Change color to your desired color
+    console.log('Model loaded successfully');
   },
   function (xhr) {
     console.log((xhr.loaded / xhr.total * 100) + '% loaded');
   },
   function (error) {
-    console.error(error);
+    console.error('Error loading model:', error);
   }
 );
 
@@ -58,13 +59,12 @@ navigator.mediaDevices.getUserMedia({
     video.srcObject = stream; // Set the video source to the camera stream
     const videoTexture = new THREE.VideoTexture(video); // Create a texture from the video feed
     scene.background = videoTexture; // Set the video texture as the scene background
-    // Verify if the video feed is loaded and visible
     video.addEventListener('loadeddata', () => {
       console.log('Video feed loaded.');
     });
   })
   .catch((err) => {
-    console.error("Error accessing the camera: ", err);
+    console.error("Error accessing the camera:", err);
   });
 
 // Set up camera controls
