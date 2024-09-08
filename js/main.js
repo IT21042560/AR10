@@ -73,6 +73,21 @@ controls.enableDamping = true;
 controls.dampingFactor = 0.25;
 controls.enableZoom = true;
 
+// Handle device orientation
+window.addEventListener('deviceorientation', (event) => {
+  if (object) {
+    // Convert device orientation values to radians
+    const alpha = THREE.MathUtils.degToRad(event.alpha);
+    const beta = THREE.MathUtils.degToRad(event.beta);
+    const gamma = THREE.MathUtils.degToRad(event.gamma);
+
+    // Apply rotation to the object
+    object.rotation.y = alpha;  // Rotate around Y-axis
+    object.rotation.x = beta;   // Rotate around X-axis
+    object.rotation.z = gamma;  // Rotate around Z-axis
+  }
+}, true);
+
 // Render the scene
 function animate() {
   requestAnimationFrame(animate);
