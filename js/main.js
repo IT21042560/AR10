@@ -42,6 +42,7 @@ function changeObjectColor(object, colorHex) {
   object.traverse((child) => {
     if (child.isMesh) {
       child.material.color.set(colorHex);
+      child.material.needsUpdate = true;
     }
   });
 }
