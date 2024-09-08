@@ -26,7 +26,7 @@ loader.load(
     scene.add(object);
     object.position.set(0, 0, 0); // Center the model
     object.scale.set(10, 10, 10); // Adjust the scale
-    changeObjectColor(object, 0x3cb371); // Change color to your desired color
+    changeObjectColor(object, 0x228b22); // Change color to your desired color
     console.log('Model loaded successfully');
   },
   function (xhr) {
